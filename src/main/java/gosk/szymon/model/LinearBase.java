@@ -1,63 +1,32 @@
 package gosk.szymon.model;
 
+import gosk.szymon.math.Matrix;
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+
 import java.math.BigDecimal;
 
+@Getter
 public abstract class LinearBase {
 
-    protected BigDecimal[][] A;
-    protected BigDecimal[] b;
-    protected BigDecimal[] c;
+    protected final Matrix<BigDecimal> A;
+    protected final Matrix<BigDecimal> b;
+    protected final Matrix<BigDecimal> c;
 
-    public LinearBase(BigDecimal[][] A, BigDecimal[] b, BigDecimal[] c) {
-       try {
-           validateFields(A, b, c);
-       } catch (IllegalArgumentException e) {
-           throw new InvalidProgramException(e.getMessage());
-       }
-       this.A = A;
-       this.b = b;
-       this.c = c;
-    }
-
-    public abstract BigDecimal[] solve();
-
-    private void validateFields(BigDecimal[][] A, BigDecimal[] b, BigDecimal[] c) {
-        if (c.length > 2) {
-            throw new IllegalArgumentException("Cannot have two than two variables");
-        }
-        if(A.length == 0 || A[0].length == 0) {
-            throw new IllegalArgumentException("Cannot have zero constraints");
-        }
-        if(A.length != b.length || A[0].length != c.length) {
-            throw new IllegalArgumentException("Program input is invalid");
-        }
-    }
-
-    public BigDecimal[][] getA() {
-        return A;
-    }
-
-    protected void setA(BigDecimal[][] a) {
-        A = a;
-    }
-
-    public BigDecimal[] getB() {
-        return b;
-    }
-
-    protected void setB(BigDecimal[] b) {
+    public LinearBase(@NotNull Matrix<BigDecimal> A, @NotNull Matrix<BigDecimal> b, @NotNull Matrix<BigDecimal> c) {
+        validateFields(A, b, c);
+        this.A = A;
         this.b = b;
-    }
-
-    public BigDecimal[] getC() {
-        return c;
-    }
-
-    protected void setC(BigDecimal[] c) {
         this.c = c;
     }
 
-    private static class InvalidProgramException extends RuntimeException {
+    private void validateFields(@NotNull Matrix<BigDecimal> A, @NotNull Matrix<BigDecimal> b, @NotNull Matrix<BigDecimal> c) {
+        if(A.height() != b.height() || A.width() != c.height()) {
+            throw new InvalidProgramException("Program input is invalid");
+        }
+    }
+
+    protected static class InvalidProgramException extends RuntimeException {
         public InvalidProgramException(String m) {
             super(m);
         }
