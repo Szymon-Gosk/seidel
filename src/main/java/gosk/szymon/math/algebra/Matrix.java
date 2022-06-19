@@ -1,4 +1,4 @@
-package gosk.szymon.math;
+package gosk.szymon.math.algebra;
 
 import gosk.szymon.exception.MathException;
 import org.jetbrains.annotations.NotNull;

@@ -1,6 +1,7 @@
-package gosk.szymon.math;
+package gosk.szymon.math.algebra;
 
 import gosk.szymon.exception.MathException;
+import gosk.szymon.math.Operations;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
