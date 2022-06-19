@@ -7,7 +7,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-public abstract class LinearBase<T> {
+public abstract class LinearBase<T> implements LinearProgram<T> {
 
     protected final Matrix<T> A;
     protected final Matrix<T> b;
@@ -20,12 +20,16 @@ public abstract class LinearBase<T> {
         this.c = c;
     }
 
+    public abstract int dimension();
+
+    @Override
     public Point<T> solve(@NotNull SolvingStrategy<T> strategy) {
         return strategy.apply(A, b, c);
     }
 
     private void validateFields(@NotNull Matrix<T> A, @NotNull Matrix<T> b, @NotNull Matrix<T> c) {
-        if(A.height() != b.height() || A.width() != c.height()) {
+        if(A.height() != b.height() || A.width() != c.height() || A.width() != dimension()
+                || b.width() != 1 || c.width() != 1) {
             throw new InvalidProgramException("Program input is invalid");
         }
     }
