@@ -1,7 +1,8 @@
-package gosk.szymon.model;
+package gosk.szymon.model.lp;
 
 import gosk.szymon.math.algebra.Matrix;
-import gosk.szymon.math.geometry.Point;
+import gosk.szymon.model.Constraint;
+import gosk.szymon.model.Result;
 import gosk.szymon.solving.SolvingStrategy;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ public abstract class LinearBase<T> implements LinearProgram<T, Constraint> {
     public abstract int dimension();
 
     @Override
-    public @NotNull Point<T> solve(@NotNull SolvingStrategy<T> strategy) {
+    public @NotNull Result<T> solve(@NotNull SolvingStrategy<T> strategy) {
         return strategy.apply(A, b, c);
     }
 

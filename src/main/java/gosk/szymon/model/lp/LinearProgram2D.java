@@ -1,6 +1,7 @@
-package gosk.szymon.model;
+package gosk.szymon.model.lp;
 
 import gosk.szymon.math.algebra.Matrix;
+import gosk.szymon.model.Constraint;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

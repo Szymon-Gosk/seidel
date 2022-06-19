@@ -1,7 +1,7 @@
-package gosk.szymon.model;
+package gosk.szymon.model.lp;
 
 import gosk.szymon.math.algebra.Matrix;
-import gosk.szymon.math.geometry.Point;
+import gosk.szymon.model.Result;
 import gosk.szymon.solving.SolvingStrategy;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +19,6 @@ public interface LinearProgram<T, E extends Enum<E>> {
 
     @NotNull List<E> getConstraints();
 
-    @NotNull Point<T> solve(@NotNull SolvingStrategy<T> strategy);
+    @NotNull Result<T> solve(@NotNull SolvingStrategy<T> strategy);
 
 }
