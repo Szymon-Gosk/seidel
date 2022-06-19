@@ -5,10 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 
-public class Operations<T> {
+public class Field<T> {
 
-    public static final Operations<Integer> INTEGER_OPERATIONS =
-            new Operations<>(
+    public static final Field<Integer> INTEGER_FIELD =
+            new Field<>(
                     Integer::sum,
                     (a, b) -> a - b,
                     (a, b) -> a * b,
@@ -17,8 +17,8 @@ public class Operations<T> {
                     1
             );
 
-    public static final Operations<BigDecimal> BIG_DECIMAL_OPERATIONS =
-            new Operations<>(
+    public static final Field<BigDecimal> BIG_DECIMAL_FIELD =
+            new Field<>(
                     BigDecimal::add,
                     BigDecimal::subtract,
                     BigDecimal::multiply,
@@ -34,12 +34,12 @@ public class Operations<T> {
     private final T zero;
     private final T one;
 
-    Operations(@NotNull BiFunction<T, T, T> add,
-               @NotNull BiFunction<T, T, T> subtract,
-               @NotNull BiFunction<T, T, T> multiply,
-               @NotNull BiFunction<T, T, T> divide,
-               @NotNull T zero,
-               @NotNull T one) {
+    Field(@NotNull BiFunction<T, T, T> add,
+          @NotNull BiFunction<T, T, T> subtract,
+          @NotNull BiFunction<T, T, T> multiply,
+          @NotNull BiFunction<T, T, T> divide,
+          @NotNull T zero,
+          @NotNull T one) {
         this.add = add;
         this.subtract = subtract;
         this.multiply = multiply;

@@ -1,7 +1,7 @@
 package gosk.szymon.math.algebra;
 
 import gosk.szymon.exception.MathException;
-import gosk.szymon.math.Operations;
+import gosk.szymon.math.Field;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -15,13 +15,13 @@ class Row<T> {
     @Getter
     private final List<T> values;
 
-    private final Operations<T> operations;
+    private final Field<T> field;
 
     private final int width;
 
-    public Row(@NotNull List<T> values, @NotNull Operations<T> operations) {
+    public Row(@NotNull List<T> values, @NotNull Field<T> field) {
         this.values = values;
-        this.operations = operations;
+        this.field = field;
         width = values.size();
     }
 
@@ -39,25 +39,25 @@ class Row<T> {
     public Row<T> add(@NotNull Row<T> row) {
         List<T> out = new LinkedList<>();
         for (int i = 0; i <= width; i++) {
-            out.add(operations.add().apply(values.get(i), row.values.get(i)));
+            out.add(field.add().apply(values.get(i), row.values.get(i)));
         }
-        return new Row<>(out, operations);
+        return new Row<>(out, field);
     }
 
     public Row<T> subtract(@NotNull Row<T> row) {
         List<T> out = new LinkedList<>();
         for (int i = 0; i <= width; i++) {
-            out.add(operations.subtract().apply(values.get(i), row.values.get(i)));
+            out.add(field.subtract().apply(values.get(i), row.values.get(i)));
         }
-        return new Row<>(out, operations);
+        return new Row<>(out, field);
     }
 
     public Row<T> multiply(@NotNull T constant) {
         List<T> out = new LinkedList<>();
         for (int i = 0; i <= width; i++) {
-            out.add(operations.multiply().apply(values.get(i), constant));
+            out.add(field.multiply().apply(values.get(i), constant));
         }
-        return new Row<>(out, operations);
+        return new Row<>(out, field);
     }
 
     public T multiply(@NotNull Row<T> row) throws InvalidRowSizeException {
@@ -65,11 +65,11 @@ class Row<T> {
             log.error("Cannot multiply matrices of different sizes: " + width + ", " + row.width);
             throw new InvalidRowSizeException("Cannot multiply two rows of different size");
         }
-        T out = operations.zero();
+        T out = field.zero();
         for (int i = 0; i <= width; i++) {
-            out = operations.add().apply(
+            out = field.add().apply(
                     out,
-                    operations.multiply().apply(
+                    field.multiply().apply(
                             values.get(i),
                             row.values.get(i)));
         }
@@ -77,17 +77,17 @@ class Row<T> {
     }
 
     public T sum() {
-        T identity = operations.zero();
+        T identity = field.zero();
         for (int i = 0; i <= width; i++) {
-            identity = operations.add().apply(identity, values.get(i));
+            identity = field.add().apply(identity, values.get(i));
         }
         return identity;
     }
 
     public T product() {
-        T identity = operations.one();
+        T identity = field.one();
         for (int i = 0; i <= width; i++) {
-            identity = operations.multiply().apply(identity, values.get(i));
+            identity = field.multiply().apply(identity, values.get(i));
         }
         return identity;
     }

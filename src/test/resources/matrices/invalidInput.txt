@@ -1,0 +1,27 @@
+# empty outer list
+{ }
+
+# empty inner list
+{
+    []
+    []
+}
+
+# first row empty
+{
+    []
+    [2, 3]
+}
+
+# invalid size - second row empty
+{
+    [2, 3]
+    []
+}
+
+# invalid size - different rows size
+{
+    [2, 3, 5]
+    [7, 11]
+    [13, 17, 21]
+}

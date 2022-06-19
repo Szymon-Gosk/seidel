@@ -1,7 +1,7 @@
 package gosk.szymon.math.algebra;
 
 import gosk.szymon.exception.MathException;
-import gosk.szymon.math.Operations;
+import gosk.szymon.math.Field;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,19 +20,19 @@ public class ImmutableMatrix<T> implements Matrix<T> {
     private final int width;
     private final int height;
 
-    private final Operations<T> operations;
+    private final Field<T> field;
 
-    public ImmutableMatrix(@NotNull List<List<T>> values, @NotNull Operations<T> operations) throws InvalidMatrixSizeException {
+    public ImmutableMatrix(@NotNull List<List<T>> values, @NotNull Field<T> field) throws InvalidMatrixSizeException {
         this.height = values.size();
         this.width = values.get(0).size();
-        this.operations = operations;
+        this.field = field;
         this.rows = initializeRows(values);
     }
 
-    private ImmutableMatrix(@NotNull List<Row<T>> rows, int width, int height, @NotNull Operations<T> operations) {
+    private ImmutableMatrix(@NotNull List<Row<T>> rows, int width, int height, @NotNull Field<T> field) {
         this.height = height;
         this.width = width;
-        this.operations = operations;
+        this.field = field;
         this.rows = rows;
     }
 
@@ -61,7 +61,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
         for (int i = 0; i < width; i++) {
             out.add(rows.get(i).add(matrix.getRows().get(i)));
         }
-        return new ImmutableMatrix<>(out, width, height, operations);
+        return new ImmutableMatrix<>(out, width, height, field);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
         for (int i = 0; i < width; i++) {
             out.add(rows.get(i).subtract(matrix.getRows().get(i)));
         }
-        return new ImmutableMatrix<>(out, width, height, operations);
+        return new ImmutableMatrix<>(out, width, height, field);
     }
 
     public ImmutableMatrix<T> multiply(@NotNull T constant) {
@@ -79,7 +79,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
         for (int i = 0; i < width; i++) {
             out.add(rows.get(i).multiply(constant));
         }
-        return new ImmutableMatrix<>(out, width, height, operations);
+        return new ImmutableMatrix<>(out, width, height, field);
     }
 
     @Override
@@ -95,9 +95,9 @@ public class ImmutableMatrix<T> implements Matrix<T> {
                     throw new InvalidMatrixSizeException(e.getMessage());
                 }
             }
-            out.add(new Row<>(nextRow, operations));
+            out.add(new Row<>(nextRow, field));
         }
-        return new ImmutableMatrix<>(out, width, height, operations);
+        return new ImmutableMatrix<>(out, width, height, field);
     }
 
     public Matrix<T> transpose() {
@@ -107,9 +107,9 @@ public class ImmutableMatrix<T> implements Matrix<T> {
             for(int j = 0; j < height(); j++) {
                 nextRow.add(get(j, i));
             }
-            out.add(new Row<>(nextRow, operations));
+            out.add(new Row<>(nextRow, field));
         }
-        return new ImmutableMatrix<>(out, width, height, operations);
+        return new ImmutableMatrix<>(out, width, height, field);
     }
 
     private <U> void validateMultiplicationCondition(Matrix<U> matrix) throws InvalidMatrixSizeException {
@@ -156,7 +156,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
                 log.error("Cannot instantiate matrix: expected width was " + width + " but width of row " + i + " was " + valuesInRow.size());
                 throw new InvalidMatrixSizeException("Rows of the matrix must have the same size");
             }
-            out.add(new Row<>(valuesInRow, operations));
+            out.add(new Row<>(valuesInRow, field));
         }
         return out;
     }
