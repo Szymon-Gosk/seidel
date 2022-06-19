@@ -38,13 +38,41 @@ public class ImmutableMatrix<T> implements Matrix<T> {
 
     @Override
     public T get(int row, int column) {
-        return rows.get(row).get(column);
+        if(row < 0 || row > height) {
+            throw new IndexOutOfBoundsException(row);
+        }
+        if(column < 0 || column > width) {
+            throw new IndexOutOfBoundsException(column);
+        }
+        return getRow(row).get(column);
     }
 
+    @Override
+    public Row<T> getRow(int index) {
+        if(index < 0 || index > height) {
+            throw new IndexOutOfBoundsException(index);
+        }
+        return rows.get(index);
+    }
+
+    @Override
+    public Row<T> getColumn(int index) {
+        if(index < 0 || index > width) {
+            throw new IndexOutOfBoundsException(index);
+        }
+        List<T> values = new ArrayList<>();
+        for(int i = 0; i < height; i++) {
+            values.add(get(i, index));
+        }
+        return new Row<>(values, field);
+    }
+
+    @Override
     public int width() {
         return width;
     }
 
+    @Override
     public int height() {
         return height;
     }
@@ -58,8 +86,8 @@ public class ImmutableMatrix<T> implements Matrix<T> {
     public ImmutableMatrix<T> add(@NotNull Matrix<T> matrix) throws InvalidMatrixSizeException {
         validateSize(matrix);
         List<Row<T>> out = new ArrayList<>();
-        for (int i = 0; i < width; i++) {
-            out.add(rows.get(i).add(matrix.getRows().get(i)));
+        for (int i = 0; i < height; i++) {
+            out.add(getRow(i).add(matrix.getRow(i)));
         }
         return new ImmutableMatrix<>(out, width, height, field);
     }
@@ -68,36 +96,36 @@ public class ImmutableMatrix<T> implements Matrix<T> {
     public ImmutableMatrix<T> subtract(@NotNull Matrix<T> matrix) throws InvalidMatrixSizeException {
         validateSize(matrix);
         List<Row<T>> out = new ArrayList<>();
-        for (int i = 0; i < width; i++) {
-            out.add(rows.get(i).subtract(matrix.getRows().get(i)));
+        for (int i = 0; i < height; i++) {
+            out.add(getRow(i).subtract(matrix.getRow(i)));
         }
         return new ImmutableMatrix<>(out, width, height, field);
     }
 
     public ImmutableMatrix<T> multiply(@NotNull T constant) {
         List<Row<T>> out = new ArrayList<>();
-        for (int i = 0; i < width; i++) {
-            out.add(rows.get(i).multiply(constant));
+        for (int i = 0; i < height; i++) {
+            out.add(getRow(i).multiply(constant));
         }
         return new ImmutableMatrix<>(out, width, height, field);
     }
 
     @Override
-    public Matrix<T> multiply(@NotNull Matrix<T> matrix) throws InvalidMatrixSizeException {
+    public ImmutableMatrix<T> multiply(@NotNull Matrix<T> matrix) throws InvalidMatrixSizeException {
         validateMultiplicationCondition(matrix);
         List<Row<T>> out = new ArrayList<>();
         for (int i = 0; i < height; i++) {
             List<T> nextRow = new ArrayList<>();
             for(int j = 0; j < matrix.width(); j++) {
                 try {
-                    nextRow.add(rows.get(i).multiply(matrix.getRows().get(j)));
+                    nextRow.add(getRow(i).multiply(matrix.getColumn(j)));
                 } catch (Row.InvalidRowSizeException e) {
                     throw new InvalidMatrixSizeException(e.getMessage());
                 }
             }
             out.add(new Row<>(nextRow, field));
         }
-        return new ImmutableMatrix<>(out, width, height, field);
+        return new ImmutableMatrix<>(out, matrix.width(), height, field);
     }
 
     public Matrix<T> transpose() {

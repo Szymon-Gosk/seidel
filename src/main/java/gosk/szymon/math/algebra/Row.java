@@ -38,23 +38,23 @@ class Row<T> {
 
     public Row<T> add(@NotNull Row<T> row) {
         List<T> out = new LinkedList<>();
-        for (int i = 0; i <= width; i++) {
-            out.add(field.add().apply(values.get(i), row.values.get(i)));
+        for (int i = 0; i < width; i++) {
+            out.add(field.add().apply(values.get(i), row.get(i)));
         }
         return new Row<>(out, field);
     }
 
     public Row<T> subtract(@NotNull Row<T> row) {
         List<T> out = new LinkedList<>();
-        for (int i = 0; i <= width; i++) {
-            out.add(field.subtract().apply(values.get(i), row.values.get(i)));
+        for (int i = 0; i < width; i++) {
+            out.add(field.subtract().apply(values.get(i), row.get(i)));
         }
         return new Row<>(out, field);
     }
 
     public Row<T> multiply(@NotNull T constant) {
         List<T> out = new LinkedList<>();
-        for (int i = 0; i <= width; i++) {
+        for (int i = 0; i < width; i++) {
             out.add(field.multiply().apply(values.get(i), constant));
         }
         return new Row<>(out, field);
@@ -66,19 +66,19 @@ class Row<T> {
             throw new InvalidRowSizeException("Cannot multiply two rows of different size");
         }
         T out = field.zero();
-        for (int i = 0; i <= width; i++) {
+        for (int i = 0; i < width; i++) {
             out = field.add().apply(
                     out,
                     field.multiply().apply(
                             values.get(i),
-                            row.values.get(i)));
+                            row.get(i)));
         }
         return out;
     }
 
     public T sum() {
         T identity = field.zero();
-        for (int i = 0; i <= width; i++) {
+        for (int i = 0; i < width; i++) {
             identity = field.add().apply(identity, values.get(i));
         }
         return identity;
@@ -86,7 +86,7 @@ class Row<T> {
 
     public T product() {
         T identity = field.one();
-        for (int i = 0; i <= width; i++) {
+        for (int i = 0; i < width; i++) {
             identity = field.multiply().apply(identity, values.get(i));
         }
         return identity;

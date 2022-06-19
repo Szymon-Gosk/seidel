@@ -11,6 +11,10 @@ public interface Matrix<T> {
 
     List<Row<T>> getRows();
 
+    Row<T> getRow(int index);
+
+    Row<T> getColumn(int index);
+
     int width();
 
     int height();
