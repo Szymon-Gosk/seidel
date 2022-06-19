@@ -31,4 +31,6 @@ public interface Matrix<T> {
 
     Matrix<T> transpose();
 
+    Matrix<T> removeRow(int index);
+
 }

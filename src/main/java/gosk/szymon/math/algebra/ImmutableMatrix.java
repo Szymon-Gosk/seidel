@@ -38,10 +38,10 @@ public class ImmutableMatrix<T> implements Matrix<T> {
 
     @Override
     public T get(int row, int column) {
-        if(row < 0 || row > height) {
+        if (row < 0 || row > height) {
             throw new IndexOutOfBoundsException(row);
         }
-        if(column < 0 || column > width) {
+        if (column < 0 || column > width) {
             throw new IndexOutOfBoundsException(column);
         }
         return getRow(row).get(column);
@@ -49,7 +49,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
 
     @Override
     public Row<T> getRow(int index) {
-        if(index < 0 || index > height) {
+        if (index < 0 || index > height) {
             throw new IndexOutOfBoundsException(index);
         }
         return rows.get(index);
@@ -57,11 +57,11 @@ public class ImmutableMatrix<T> implements Matrix<T> {
 
     @Override
     public Row<T> getColumn(int index) {
-        if(index < 0 || index > width) {
+        if (index < 0 || index > width) {
             throw new IndexOutOfBoundsException(index);
         }
         List<T> values = new ArrayList<>();
-        for(int i = 0; i < height; i++) {
+        for (int i = 0; i < height; i++) {
             values.add(get(i, index));
         }
         return new Row<>(values, field);
@@ -116,7 +116,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
         List<Row<T>> out = new ArrayList<>();
         for (int i = 0; i < height; i++) {
             List<T> nextRow = new ArrayList<>();
-            for(int j = 0; j < matrix.width(); j++) {
+            for (int j = 0; j < matrix.width(); j++) {
                 try {
                     nextRow.add(getRow(i).multiply(matrix.getColumn(j)));
                 } catch (Row.InvalidRowSizeException e) {
@@ -128,14 +128,29 @@ public class ImmutableMatrix<T> implements Matrix<T> {
         return new ImmutableMatrix<>(out, matrix.width(), height, field);
     }
 
+    @Override
     public Matrix<T> transpose() {
         List<Row<T>> out = new ArrayList<>();
-        for(int i = 0; i < width(); i++) {
+        for (int i = 0; i < width(); i++) {
             List<T> nextRow = new ArrayList<>();
-            for(int j = 0; j < height(); j++) {
+            for (int j = 0; j < height(); j++) {
                 nextRow.add(get(j, i));
             }
             out.add(new Row<>(nextRow, field));
+        }
+        return new ImmutableMatrix<>(out, width, height, field);
+    }
+
+    @Override
+    public Matrix<T> removeRow(int index) {
+        List<Row<T>> out = new ArrayList<>();
+        if (index < 0 || index > width) {
+            throw new IndexOutOfBoundsException(index);
+        }
+        for (int i = 0; i < height; i++) {
+            if(i != index) {
+                out.add(getRow(i));
+            }
         }
         return new ImmutableMatrix<>(out, width, height, field);
     }

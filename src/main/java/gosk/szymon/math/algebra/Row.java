@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
-class Row<T> {
+public class Row<T> {
 
     @Getter
     private final List<T> values;
