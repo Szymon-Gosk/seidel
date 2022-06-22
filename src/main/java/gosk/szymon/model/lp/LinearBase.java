@@ -7,7 +7,7 @@ import gosk.szymon.solving.SolvingStrategy;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -32,7 +32,7 @@ public abstract class LinearBase<T> implements LinearProgram<T, Constraint> {
         this.A = A;
         this.b = b;
         this.c = c;
-        List<Constraint> constraints = new ArrayList<>();
+        List<Constraint> constraints = new LinkedList<>();
         for (int i = 0; i < A.height(); i++) {
             constraints.add(constraintType);
         }
@@ -43,7 +43,7 @@ public abstract class LinearBase<T> implements LinearProgram<T, Constraint> {
 
     @Override
     public @NotNull Result<T> solve(@NotNull SolvingStrategy<T> strategy) {
-        return strategy.apply(A, b, c);
+        return strategy.apply(A, b, c, constraints);
     }
 
     private void validateFields(@NotNull Matrix<T> A, @NotNull Matrix<T> b, @NotNull Matrix<T> c) {

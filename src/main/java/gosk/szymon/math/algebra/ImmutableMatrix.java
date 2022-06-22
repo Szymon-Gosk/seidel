@@ -20,6 +20,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
     private final int width;
     private final int height;
 
+    @Getter
     private final Field<T> field;
 
     public ImmutableMatrix(@NotNull List<List<T>> values, @NotNull Field<T> field) throws InvalidMatrixSizeException {
@@ -65,6 +66,17 @@ public class ImmutableMatrix<T> implements Matrix<T> {
             values.add(get(i, index));
         }
         return new Row<>(values, field);
+    }
+
+    @Override
+    public Matrix<T> addColumn(Row<T> column) {
+        List<Row<T>> rows = new ArrayList<>();
+        for (int i = 0; i < height; i++) {
+            List<T> rowValues = getRow(i).getValues();
+            rowValues.add(column.get(i));
+            rows.add(new Row<>(rowValues, field));
+        }
+        return new ImmutableMatrix<>(rows, width, height, field);
     }
 
     @Override
@@ -144,7 +156,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
     @Override
     public Matrix<T> removeRow(int index) {
         List<Row<T>> out = new ArrayList<>();
-        if (index < 0 || index > width) {
+        if (index < 0 || index > height) {
             throw new IndexOutOfBoundsException(index);
         }
         for (int i = 0; i < height; i++) {
@@ -152,7 +164,7 @@ public class ImmutableMatrix<T> implements Matrix<T> {
                 out.add(getRow(i));
             }
         }
-        return new ImmutableMatrix<>(out, width, height, field);
+        return new ImmutableMatrix<>(out, width, height - 1, field);
     }
 
     private <U> void validateMultiplicationCondition(Matrix<U> matrix) throws InvalidMatrixSizeException {

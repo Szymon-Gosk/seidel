@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
-public class CanonicalLinearProgram2D extends LinearProgram2D<BigDecimal> {
+public class CanonicalLinearProgram2D extends LinearProgram2D<Double> {
 
-    public CanonicalLinearProgram2D(@NotNull Matrix<BigDecimal> A, @NotNull Matrix<BigDecimal> b, @NotNull Matrix<BigDecimal> c) {
+    public CanonicalLinearProgram2D(@NotNull Matrix<Double> A, @NotNull Matrix<Double> b, @NotNull Matrix<Double> c) {
         super(A, b, c, Constraint.LESS_OR_EQUAL);
     }
 

@@ -1,20 +1,13 @@
 package gosk.szymon.model;
 
-import gosk.szymon.math.geometry.Point;
-import gosk.szymon.math.geometry.Surface;
-
-import java.util.Optional;
+import java.util.List;
 
 public interface Result<T> {
 
-    boolean isPositiveInfinity();
+    T get(int index);
 
-    boolean isNegativeInfinity();
+    List<T> getAll();
 
-    boolean isNone();
-
-    Optional<Point<T>> getPoint();
-
-    Optional<Surface<T>> getSurface();
+    int size();
 
 }

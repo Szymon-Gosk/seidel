@@ -15,6 +15,7 @@ public class Row<T> {
     @Getter
     private final List<T> values;
 
+    @Getter
     private final Field<T> field;
 
     private final int width;

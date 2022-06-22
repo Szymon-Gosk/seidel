@@ -18,22 +18,7 @@ import java.util.List;
 public class Application {
 
     public static void main(String[] args) {
-        List<ImmutableMatrix<BigDecimal>> matrices = generateFrom("sample.txt");
 
-        ImmutableMatrix<BigDecimal> A = matrices.get(0);
-        ImmutableMatrix<BigDecimal> b = matrices.get(1);
-        ImmutableMatrix<BigDecimal> c = matrices.get(2);
-
-        CanonicalLinearProgram2D lp = new CanonicalLinearProgram2D(A, b, c);
-        SeidelMethod2D<BigDecimal> sm = new SeidelMethod2D<>();
-
-        Result<BigDecimal> res = lp.solve(sm);
-        if(res.getPoint().isPresent()) {
-            System.out.println("POINT SOLUTION");
-        }
-        if(res.getSurface().isPresent()) {
-            System.out.println("SURFACE SOLUTION");
-        }
     }
 
     private static List<ImmutableMatrix<BigDecimal>> generateFrom(String path) {
